@@ -1,0 +1,76 @@
+#!/bin/sh
+#
+# git2 - handle multiple git repositories in one directory
+# Copyright (C) 2016 Simon Walz, http://sw.nerdbox.de/
+
+
+# exchange files
+exchange_files() {
+	basefile="$1"
+	append_old="$2"
+	append_new="$3"
+	if test -f "${basefile}"
+	then
+		mv "${basefile}" "${basefile}_${append_old}"
+	fi
+	if test -f "${basefile}_${append_new}"
+	then
+		mv "${basefile}_${append_new}" "${basefile}"
+	fi
+}
+
+
+# move git dependent files
+move_git_files() {
+	gitfile="$1"
+	exchange_files "${gitfile}" "1" "2"
+}
+# move back the git dependent files:
+move_git_files_back() {
+	gitfile="$1"
+	exchange_files "${gitfile}" "2" "1"
+}
+
+if test -z "${GITTWO_DIRNAME}"
+then
+	GITTWO_DIRNAME=.git2
+fi
+
+# find gittwo base dir:
+GITTWO_BASE=.
+ldir=
+while test \! -d "${ldir}${GITTWO_DIRNAME}"
+do
+	ldir="${ldir}../"
+	cd "${ldir}" >/dev/null
+	GITTWO_BASE=`pwd`
+	cd - >/dev/null
+	if test "x${GITTWO_BASE}" = "x/"
+	then
+		echo "fatal: Not a git repository (or any of the parent directories): ${GITTWO_DIRNAME}"
+		exit 1
+	fi
+done
+GITTWO_DIR="${GITTWO_BASE}/${GITTWO_DIRNAME}"
+#echo "Git-Two Base-Dir: ${GITTWO_DIR}"
+
+# exclude git files in git two:
+echo "${GITTWO_DIRNAME}" >${GITTWO_DIR}/info/exclude
+git ls-files | sed -e 's/.gitignore/.gitignore_1/g' | sed -e 's/.gitattributes/.attributes_1/g' >>${GITTWO_DIR}/info/exclude
+
+# move git dependent files
+move_git_files "${GITTWO_BASE}/.gitignore"
+move_git_files "${GITTWO_BASE}/.gitattributes"
+
+# exec the git command:
+# http://git-scm.com/book/es/v2/Git-Internals-Environment-Variables
+GIT_DIR="${GITTWO_DIR}" git "$@"
+EXIT_STATE=$?
+
+# move back the git dependent files:
+move_git_files_back "${GITTWO_BASE}/.gitignore"
+move_git_files_back "${GITTWO_BASE}/.gitattributes"
+
+# exit with exit state of the git command
+exit ${EXIT_STATE}
+
