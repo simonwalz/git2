@@ -31,9 +31,9 @@ git2 git2_exclude
 
 ## Options
 
-  * Environment Variable `GITTWO_DIRNAME`:\
-    Dirname and acronym for the current (second) git repository. Default: `.git2`.\
-    See file `git3` for an example.
+  * Environment Variable `GITTWO_DIRNAME`:<br>
+  Dirname and acronym for the current (second) git repository. Default: `.git2`.<br>
+  See file `git3` for an example.
 
 ## How it works
 
