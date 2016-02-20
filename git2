@@ -73,7 +73,7 @@ fi
 if test -d "${GITTWO_DIR}"
 then
 	echo "${GITTWO_DIRNAME}" >${GITTWO_DIR}/info/exclude
-	git ls-files | sed -e 's/.gitignore/.gitignore_git1/g' | sed -e 's/.gitattributes/.attributes_git1/g' >>${GITTWO_DIR}/info/exclude
+	git ls-files 2>/dev/null | sed -e 's/.gitignore/.gitignore_git1/g' | sed -e 's/.gitattributes/.attributes_git1/g' >>${GITTWO_DIR}/info/exclude
 fi
 
 # move git dependent files
