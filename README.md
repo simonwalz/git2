@@ -16,7 +16,7 @@ For example, init a new repository:
 git2 init .
 ```
 
-The `.gitignore` and `.gitattribute` files for the second git repository are named `.gitignore_git2` and `.gitiattributes_git2`. When the git2 command is running, the files are renamed to their original names (without _git2).
+The ``.gitignore`` and ``.gitattribute`` files for the second git repository are named ``.gitignore_git2`` and ``.gitiattributes_git2``. When the git2 command is running, the files are renamed to their original names (without ``_git2``).
 
 ### Addional commands
 
