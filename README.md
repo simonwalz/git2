@@ -24,7 +24,7 @@ git2 init .
 
 First, git2 tries to locate the git2 `.git2` repository.
 Following it exchanges to .gitignore and .gitattribute files.
-After that it executes the real git command (with a custom GIT_DIR environmnet). 
+After that it executes the real git command (with a custom GIT_DIR and GIT_WORK_TREE environmet).
 Finally, it reexchanges to dot git files.
 
 To ignore files from the first git repository, all it's files are added to the `.git2/info/exclude` file.
