@@ -16,6 +16,19 @@ For example, init a new repository:
 git2 init .
 ```
 
+### Addional commands
+
+To see the current git2 base dir, just run
+```sh
+git2
+```
+
+To add an exclude file into the first git repository run:
+
+```sh
+git2 git2_exclude
+```
+
 ## Options
 
   * Environment Variable `GITTWO_DIRNAME`: Dirname and acronym for the current (second) git repository.

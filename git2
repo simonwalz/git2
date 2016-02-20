@@ -58,7 +58,7 @@ GITTWO_DIR="${GITTWO_BASE}/${GITTWO_DIRNAME}"
 
 if test "x$1" = "x"
 then
-	echo "Git-Two Base-Dir: ${GITTWO_DIR}"
+	echo "git2 base dir: ${GITTWO_DIR}"
 	exit 0
 fi
 if test "x$1" = "xgit2_exclude"
