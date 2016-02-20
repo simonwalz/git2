@@ -23,13 +23,13 @@ exchange_files() {
 # move git dependent files
 move_git_files() {
 	gitfile="$1"
-	append=`echo "${GITTWO_DIRNAME}" | sed -e 's/\.///g/'`
+	append=`echo "${GITTWO_DIRNAME}" | sed -e 's/\.//g'`
 	exchange_files "${gitfile}" "git1" "${append}"
 }
 # move back the git dependent files:
 move_git_files_back() {
 	gitfile="$1"
-	append=`echo "${GITTWO_DIRNAME}" | sed -e 's/\.///g/'`
+	append=`echo "${GITTWO_DIRNAME}" | sed -e 's/\.//g'`
 	exchange_files "${gitfile}" "${append}" "git1"
 }
 
