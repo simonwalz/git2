@@ -47,18 +47,34 @@ do
 	cd "${ldir}" >/dev/null
 	GITTWO_BASE=`pwd`
 	cd - >/dev/null
-	if test "x${GITTWO_BASE}" = "x/"
+	if test "x${GITTWO_BASE}" = "x/" && test \! -d "/${GITTWO_DIRNAME}"
 	then
-		echo "fatal: Not a git repository (or any of the parent directories): ${GITTWO_DIRNAME}"
-		exit 1
+		#echo "warning: Not a git repository (or any of the parent directories): ${GITTWO_DIRNAME}"
+		GITTWO_BASE="."
+		break
 	fi
 done
 GITTWO_DIR="${GITTWO_BASE}/${GITTWO_DIRNAME}"
-#echo "Git-Two Base-Dir: ${GITTWO_DIR}"
+
+if test "x$1" = "x"
+then
+	echo "Git-Two Base-Dir: ${GITTWO_DIR}"
+	exit 0
+fi
+if test "x$1" = "xgit2_exclude"
+then
+	append=`echo "${GITTWO_DIRNAME}" | sed -e 's/\.//g'`
+	echo "${GITTWO_DIRNAME}" >${GITTWO_BASE}/.git/info/exclude
+	git2 ls-files | sed -e 's/.gitignore/.gitignore_${append}/g' | sed -e 's/.gitattributes/.attributes_${append}/g' >>${GITTWO_BASE}/.git/info/exclude
+	exit 0
+fi
 
 # exclude git files in git two:
-echo "${GITTWO_DIRNAME}" >${GITTWO_DIR}/info/exclude
-git ls-files | sed -e 's/.gitignore/.gitignore_1/g' | sed -e 's/.gitattributes/.attributes_1/g' >>${GITTWO_DIR}/info/exclude
+if test -d "${GITTWO_DIR}"
+then
+	echo "${GITTWO_DIRNAME}" >${GITTWO_DIR}/info/exclude
+	git ls-files | sed -e 's/.gitignore/.gitignore_git1/g' | sed -e 's/.gitattributes/.attributes_git1/g' >>${GITTWO_DIR}/info/exclude
+fi
 
 # move git dependent files
 move_git_files "${GITTWO_BASE}/.gitignore"
