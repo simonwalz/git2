@@ -1,6 +1,6 @@
 # git2
 
-Ever wanted to handle multiple git repositories in one single directory. For example, if you deploy a software with git, you may not want to add the configuration into that repository.
+Ever wanted to handle multiple git repositories in one single directory? For example, if you deploy a software with git, you may not want to add the configuration into that repository.
 
 Our idea: Just initialise a second git repository in the same directory and call it `.git2`.
 
