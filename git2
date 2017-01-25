@@ -68,6 +68,15 @@ then
 	git2 ls-files | sed -e 's/.gitignore/.gitignore_${append}/g' | sed -e 's/.gitattributes/.attributes_${append}/g' >>${GITTWO_BASE}/.git/info/exclude
 	exit 0
 fi
+if test "x$1" = "xhelp"
+then
+	git help
+	echo
+	echo "   git2_exclude   set exclude file of git1 to the files of git2"
+	echo "   git2_swap      swap git1 and git2"
+	exit 0
+fi
+
 
 # exclude git files in git two:
 if test -d "${GITTWO_DIR}"
