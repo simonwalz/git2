@@ -3,20 +3,23 @@
 # git2 - handle multiple git repositories in one directory
 # Copyright (C) 2016 Simon Walz, http://sw.nerdbox.de/
 
+move_files() {
+	basefile="$1"
+	targetfile="$2"
+
+	if test -f "${basefile}" || test -d "${basefile}"
+	then
+		mv "${basefile}" "${targetfile}"
+	fi
+}
 
 # exchange files
 exchange_files() {
 	basefile="$1"
 	append_old="$2"
 	append_new="$3"
-	if test -f "${basefile}"
-	then
-		mv "${basefile}" "${basefile}_${append_old}"
-	fi
-	if test -f "${basefile}_${append_new}"
-	then
-		mv "${basefile}_${append_new}" "${basefile}"
-	fi
+	move_files "${basefile}" "${basefile}_${append_old}"
+	move_files "${basefile}_${append_new}" "${basefile}"
 }
 
 
@@ -66,6 +69,29 @@ then
 	append=`echo "${GITTWO_DIRNAME}" | sed -e 's/\.//g'`
 	echo "${GITTWO_DIRNAME}" >${GITTWO_BASE}/.git/info/exclude
 	git2 ls-files | sed -e 's/.gitignore/.gitignore_${append}/g' | sed -e 's/.gitattributes/.attributes_${append}/g' >>${GITTWO_BASE}/.git/info/exclude
+	exit 0
+fi
+if test "x$1" = "xgit2_swap"
+then
+	echo "swapped git1 and git2"
+	# git2 name:
+	append=`echo "${GITTWO_DIRNAME}" | sed -e 's/\.//g'`
+
+	# move to swap:
+	move_files ".${append}" .gitswap
+	move_files ".gitignore_${append}" ".gitignore_gitswap"
+	move_files ".gitattributes_${append}" ".gitattributes_gitswap"
+
+	# move git to git2:
+	move_files ".git" ".${append}"
+	move_files ".gitignore" ".gitignore_${append}"
+	move_files ".gitattributes" ".gitattributes_${append}"
+
+	# move swap to git:
+	move_files .gitswap .git
+	move_files ".gitignore_gitswap" ".gitignore"
+	move_files ".gitattributes_gitswap" ".gitattributes"
+
 	exit 0
 fi
 if test "x$1" = "xhelp"
