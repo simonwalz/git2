@@ -14,20 +14,37 @@ For example, init a new repository:
 git2 init .
 ```
 
-The ``.gitignore`` and ``.gitattribute`` files for the second git repository are named ``.gitignore_git2`` and ``.gitiattributes_git2``. When the git2 command is running, these files are renamed to their original names (without ``_git2``).
+The ``.gitignore`` and ``.gitattribute`` files for the second git repository are named ``.gitignore_git2`` and ``.gitiattributes_git2``. When the git2 command is running, these files are renamed to their original names (without ``_git2``). So to add ``.gitignore_git2`` just run ``git add .gitignore``.
 
 ### Addional commands
 
-Get current git2 base dir information by executing:
-```sh
-git2
-```
-
-To add an exclude file (``.git/info/exclude``) with the files of the second git repository into the first git repository run:
-
-```sh
-git2 git2_exclude
-```
+<table>
+  <thead>
+  <tr>
+    <th>Option</th>
+    <th>Description</th>
+    <th>Default Value</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td><code>git2</code></td>
+    <td>Get current git2 base dir information.</td>
+  </tr>
+  <tr>
+    <td><code>git2 git2_exclude</code></td>
+    <td>Add an exclude file in the first git repository (``.git/info/exclude``) with the files of the second git repository.</td>
+  </tr>
+  <tr>
+    <td><code>git2 git2_swap</code></td>
+    <td>Swap .git1 and .git2 repositories.</td>
+  </tr>
+  <tr>
+    <td><code>git2 help</code></td>
+    <td>Help dialog with git2 commands.</td>
+  </tr>
+  </body>
+</table>
 
 ## Options
 
