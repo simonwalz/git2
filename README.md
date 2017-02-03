@@ -32,7 +32,7 @@ The ``.gitignore`` and ``.gitattribute`` files for the second git repository are
   </tr>
   <tr>
     <td><code>git2 git2_exclude</code></td>
-    <td>Add an exclude file in the first git repository (``.git/info/exclude``) with the files of the second git repository.</td>
+    <td>Add an exclude file in the first git repository (<code>.git/info/exclude</code>) with the files of the second git repository.</td>
   </tr>
   <tr>
     <td><code>git2 git2_swap</code></td>
