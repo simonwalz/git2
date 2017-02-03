@@ -23,7 +23,6 @@ The ``.gitignore`` and ``.gitattribute`` files for the second git repository are
   <tr>
     <th>Option</th>
     <th>Description</th>
-    <th>Default Value</th>
   </tr>
   </thead>
   <tbody>
