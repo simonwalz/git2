@@ -42,7 +42,7 @@ The ``.gitignore`` and ``.gitattribute`` files for the second git repository are
     <td><code>git2 help</code></td>
     <td>Help dialog with git2 commands.</td>
   </tr>
-  </body>
+  </tbody>
 </table>
 
 ## Options
