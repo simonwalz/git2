@@ -3,126 +3,48 @@
 # git2 - handle multiple git repositories in one directory
 # Copyright (C) 2016 Simon Walz, http://sw.nerdbox.de/
 
-move_files() {
-	basefile="$1"
-	targetfile="$2"
+# require library functions
+SCRIPTPATH="$(readlink -f 2>/dev/null || perl -MCwd -e 'print Cwd::abs_path shift' $0)"
+source "$(dirname "${SCRIPTPATH}")/lib.sh"
 
-	if test -f "${basefile}" || test -d "${basefile}"
-	then
-		mv "${basefile}" "${targetfile}"
-	fi
-}
-
-# exchange files
-exchange_files() {
-	basefile="$1"
-	append_old="$2"
-	append_new="$3"
-	move_files "${basefile}" "${basefile}_${append_old}"
-	move_files "${basefile}_${append_new}" "${basefile}"
-}
-
-
-# move git dependent files
-move_git_files() {
-	gitfile="$1"
-	append=`echo "${GITTWO_DIRNAME}" | sed -e 's/\.//g'`
-	exchange_files "${gitfile}" "git1" "${append}"
-}
-# move back the git dependent files:
-move_git_files_back() {
-	gitfile="$1"
-	append=`echo "${GITTWO_DIRNAME}" | sed -e 's/\.//g'`
-	exchange_files "${gitfile}" "${append}" "git1"
-}
-
-if test -z "${GITTWO_DIRNAME}"
-then
-	GITTWO_DIRNAME=.git2
-fi
-
-# find gittwo base dir:
-GITTWO_BASE=.
-ldir=
-while test \! -d "${ldir}${GITTWO_DIRNAME}"
-do
-	ldir="${ldir}../"
-	cd "${ldir}" >/dev/null
-	GITTWO_BASE=`pwd`
-	cd - >/dev/null
-	if test "x${GITTWO_BASE}" = "x/" && test \! -d "/${GITTWO_DIRNAME}"
-	then
-		#echo "warning: Not a git repository (or any of the parent directories): ${GITTWO_DIRNAME}"
-		GITTWO_BASE="."
-		break
-	fi
-done
-GITTWO_DIR="${GITTWO_BASE}/${GITTWO_DIRNAME}"
 
 if test "x$1" = "x"
 then
 	echo "git2 base dir: ${GITTWO_DIR}"
 	exit 0
 fi
-if test "x$1" = "xgit2_exclude"
+if test "x$(command -v "git2-$1")" != "x"
 then
-	append=`echo "${GITTWO_DIRNAME}" | sed -e 's/\.//g'`
-	echo "${GITTWO_DIRNAME}" >${GITTWO_BASE}/.git/info/exclude
-	git2 ls-files | sed -e 's/.gitignore/.gitignore_${append}/g' | sed -e 's/.gitattributes/.attributes_${append}/g' >>${GITTWO_BASE}/.git/info/exclude
-	exit 0
-fi
-if test "x$1" = "xgit2_swap"
-then
-	echo "swapped git1 and git2"
-	# git2 name:
-	append=`echo "${GITTWO_DIRNAME}" | sed -e 's/\.//g'`
-
-	# move to swap:
-	move_files ".${append}" .gitswap
-	move_files ".gitignore_${append}" ".gitignore_gitswap"
-	move_files ".gitattributes_${append}" ".gitattributes_gitswap"
-
-	# move git to git2:
-	move_files ".git" ".${append}"
-	move_files ".gitignore" ".gitignore_${append}"
-	move_files ".gitattributes" ".gitattributes_${append}"
-
-	# move swap to git:
-	move_files .gitswap .git
-	move_files ".gitignore_gitswap" ".gitignore"
-	move_files ".gitattributes_gitswap" ".gitattributes"
-
-	exit 0
-fi
-if test "x$1" = "xhelp"
-then
-	git help
-	echo
-	echo "   git2_exclude   set exclude file of git1 to the files of git2"
-	echo "   git2_swap      swap git1 and git2"
-	exit 0
+	subcmd="$1"
+	shift
+	"git2-${subcmd}" "$@"
+	EXIT_STATE=$?
+	exit ${EXIT_STATE}
 fi
 
+git2_search_base_dir
 
-# exclude git files in git two:
-if test -d "${GITTWO_DIR}"
+# check if an other git2 instance is already active:
+GITTWO_ACTIVE=0
+if test -f "${GITTWO_BASE}.git2_is_active"
 then
-	echo "${GITTWO_DIRNAME}" >${GITTWO_DIR}/info/exclude
-	git ls-files 2>/dev/null | sed -e 's/.gitignore/.gitignore_git1/g' | sed -e 's/.gitattributes/.attributes_git1/g' >>${GITTWO_DIR}/info/exclude
+	GITTWO_ACTIVE=1
 fi
 
-# move git dependent files
-move_git_files "${GITTWO_BASE}/.gitignore"
-move_git_files "${GITTWO_BASE}/.gitattributes"
+trap 'git2_cleanup; exit 1' 2
+trap 'git2_cleanup; exit 1' 15
+
+
+git2_setup
 
 # exec the git command:
 # http://git-scm.com/book/es/v2/Git-Internals-Environment-Variables
-GIT_WORK_TREE="${GITTWO_BASE}" GIT_DIR="${GITTWO_DIR}" git "$@"
+test "x${GITTWO_BASE}" != "x" && export GIT_WORK_TREE="${GITTWO_BASE}"
+export GIT_DIR="${GITTWO_DIR}"
+git "$@"
 EXIT_STATE=$?
 
-# move back the git dependent files:
-move_git_files_back "${GITTWO_BASE}/.gitignore"
-move_git_files_back "${GITTWO_BASE}/.gitattributes"
+git2_cleanup
 
 # exit with exit state of the git command
 exit ${EXIT_STATE}

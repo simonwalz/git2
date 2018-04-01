@@ -31,12 +31,12 @@ The ``.gitignore`` and ``.gitattribute`` files for the second git repository are
     <td>Get current git2 base dir information.</td>
   </tr>
   <tr>
-    <td><code>git2 git2_exclude</code></td>
+    <td><code>git2 setup-exclude</code></td>
     <td>Add an exclude file in the first git repository (<code>.git/info/exclude</code>) with the files of the second git repository.</td>
   </tr>
   <tr>
-    <td><code>git2 git2_swap</code></td>
-    <td>Swap .git1 and .git2 repositories.</td>
+    <td><code>git2 swap-git2</code></td>
+    <td>Swap .git and .git2 repositories.</td>
   </tr>
   <tr>
     <td><code>git2 help</code></td>
@@ -44,6 +44,8 @@ The ``.gitignore`` and ``.gitattribute`` files for the second git repository are
   </tr>
   </tbody>
 </table>
+
+These sub commands are individuell script files named `git2-SUBCOMMAND`.
 
 ## Options
 
