@@ -46,8 +46,8 @@ create_exclude() {
 			>>${gitdir}/info/exclude
 	fi
 	"${gitcmd}" ls-files 2>/dev/null | \
-		sed -e 's/.gitignore/.gitignore_${append}/g' | \
-		sed -e 's/.gitattributes/.gitattributes_${append}/g' | \
+		sed -e "s/.gitignore/.gitignore_${append}/g" | \
+		sed -e "s/.gitattributes/.gitattributes_${append}/g" | \
 		sed -e 's|^|/|' \
 		>>${gitdir}/info/exclude
 }
