@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # require library functions
 SCRIPTPATH="$(readlink -f 2>/dev/null || perl -MCwd -e 'print Cwd::abs_path shift' $0)"
