@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# require library functions
+SCRIPTPATH="$(readlink -f 2>/dev/null || perl -MCwd -e 'print Cwd::abs_path shift' $0)"
+source "$(dirname "${SCRIPTPATH}")/lib.sh"
+
+git2_search_base_dir
+
+REPO=$1
+DIR=$2
+
+if test "x${REPO}" = "x"
+then
+	echo "No Repository given"
+fi
+
+
+if test "x${DIR}" = "x"
+then
+	DIR="."
+fi
+
+git2 init "${DIR}"
+git2 remote add origin "${REPO}"
+git2 fetch
+git2 checkout -b master --track origin/master
+git2 reset --mixed origin/master
+
