@@ -14,7 +14,15 @@ For example, init a new repository:
 git2 init .
 ```
 
+Use `git2 add`, `git2 commit` and all other commands you known.
+
 The ``.gitignore`` and ``.gitattribute`` files for the second git repository are named ``.gitignore_git2`` and ``.gitiattributes_git2``. When the git2 command is running, these files are renamed to their original names (without ``_git2``). So to add ``.gitignore_git2`` just run ``git add .gitignore``.
+
+You can clone an repository as git2-repository in an existing (and non empty) directory:
+```sh
+git2 clone REPO .
+```
+
 
 ### Addional commands
 

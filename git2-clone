@@ -6,8 +6,25 @@ source "$(dirname "${SCRIPTPATH}")/lib.sh"
 
 git2_search_base_dir
 
-REPO=$1
-DIR=$2
+remote_name="origin"
+branch_name="master"
+
+# parse git clone arguments:
+while test "x$1" != "x--" && test "x${1:0:1}" == "x-"; do
+	if test "x$1" = "x-o" || test "x$1" = "x--origin"; then
+		shift
+		remote_name="$1"
+	fi
+	if test "x$1" = "x-b" || test "x$1" = "x--branch"; then
+		shift
+		branch_name="$1"
+	fi
+	shift
+done
+test "x$1" = "x--" && shift
+
+REPO="$1"
+DIR="$2"
 
 if test "x${REPO}" = "x"
 then
@@ -20,9 +37,11 @@ then
 	DIR="."
 fi
 
-git2 init "${DIR}"
-git2 remote add origin "${REPO}"
-git2 fetch
-git2 checkout -b master --track origin/master
-git2 reset --mixed origin/master
+git2 init "${DIR}" && \
+	git2 remote add "${remote_name}" "${REPO}" && \
+	git2 fetch
+
+git2 checkout -b "${branch_name}" --track "${remote_name}/${branch_name}"
+
+git2 reset --mixed "${remote_name}/${branch_name}"
 
