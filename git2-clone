@@ -39,9 +39,12 @@ fi
 
 git2 init "${DIR}" && \
 	git2 remote add "${remote_name}" "${REPO}" && \
-	git2 fetch
+	git2 fetch && \
+	git2 branch --track "${branch_name}" "${remote_name}/${branch_name}" &&\
+	git2 reset -q && \
+	git2 checkout-index -a
 
-git2 checkout -b "${branch_name}" --track "${remote_name}/${branch_name}"
-
-git2 reset --mixed "${remote_name}/${branch_name}"
+# git2 branch ... = checkout without overwriting existing files:
+# old: git2 checkout -b "${branch_name}" --track "${remote_name}/${branch_name}"
+# git2 checkout-index -a = creates deleted files
 
