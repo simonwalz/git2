@@ -4,7 +4,7 @@
 # Copyright (C) 2016 Simon Walz, http://sw.nerdbox.de/
 
 # require library functions
-SCRIPTPATH="$(readlink -f 2>/dev/null || perl -MCwd -e 'print Cwd::abs_path shift' $0)"
+SCRIPTPATH="$(readlink -f "$0" 2>/dev/null || perl -MCwd -e 'print Cwd::abs_path shift' "$0")"
 source "$(dirname "${SCRIPTPATH}")/lib.sh"
 
 
